@@ -1,0 +1,101 @@
+<%@ page import="hkapps.shipment_tracking.*"%>
+<%@ page import="com.hkapps.util.*"%>
+
+<html>
+
+<head>
+<title>Shipment Tracking</title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+</head>
+
+<%
+/*
+if ((request.getParameter("rload") == null) || (!request.getParameter("rload").equals("Y"))) {
+  Common common = new Common();
+  out.println("<body><form name='pre' method='post' action='" + common.convert_path(request.getServerPort(), (request.getRequestURL()).toString(), request.getServletPath(), "eng_track_home.html") + "'>");   
+*/
+%>
+
+<!--<input type="hidden" name="rload" value="Y">
+</form>
+</body>
+-->
+<script LANGUAGE="javascript">
+//document.pre.submit();
+</script>
+</html>
+
+<%
+//} else {
+%>
+
+<script src='https://www.recaptcha.net/recaptcha/api.js' async defer></script>
+
+<script src="../js_client/rollovers.js" type="text/javascript"></script>
+
+<script language="JavaScript" src="../js_client_eng_hws/eng_st_FormCheck.js"></script>
+<script>
+function onSubmit(token) {
+     if (checkForm(document.getElementById("home"))) {
+		document.getElementById("home").submit();
+	 }
+}
+</script>
+
+<body bgcolor=#ffffff><blockquote>
+<form id=home action="eng_track.jsp" method=post>
+  <input TYPE=hidden name="awb"></input>
+  <div align="left"><table border="0" width="465" height="1">
+    <tr>
+      <td width="1" height="1" valign="top">
+        <textarea name="airbill" rows="12" cols="20"></textarea>
+      </td>
+      <td></td>
+      <td width="265" height="1" valign="top">
+        <font size="2" face="Frutiger, Arial">
+        For tracking of shipments originated from or destinated to Hong Kong, 
+        please enter the <b>Airwaybill Number(s)</b> of the shipment(s) you wish 
+	to track. If you wish to track more than one shipment, please enter the 
+	<b>Airwaybill Number</b> on next line.&nbsp; You may track up to 10 shipments.
+        <p>
+        If <b>both the origins and destinations</b> of your shipments are outside Hong Kong,
+	please click 
+	<a onmouseover="swapImageById('global', 'arrow', 'on');" title="global" 
+href="javascript:doPopup3('http://www.dhl.com.hk/en/express/tracking.html');" onmouseout="swapImageById('global', 'arrow', 'off');">
+<img id="global" src="../images/arrow_r.gif" border="0" hspace="2">Global Shipment Tracking</a> for delivery details.
+	</font>
+      </td>
+    </tr>
+	<!--
+	<tr>
+      <td colspan=3>
+	<div class="g-recaptcha" data-sitekey="6LcG9NcZAAAAAPrHXkDr-PAqYgtk1Z7Lf932f7Eg"></div>
+	</td>
+    </tr>
+	-->
+    <tr>
+      <td colspan=3>
+<!--	<input type=submit value="Start Tracking" onClick="return checkForm(home);">
+-->
+
+	<button class="g-recaptcha" 
+        data-sitekey="6LcB8dcZAAAAAJO9mElsjCkPrWVj1rXr2SH9ML_h" 
+        data-callback='onSubmit' 
+        data-action='submit'>Start Tracking</button>
+		
+	<input type=reset value="Clear">
+      </td>
+    </tr>
+  </table>
+  </div>
+
+</form>
+
+</blockquote>
+</body>
+<SCRIPT LANGUAGE="javascript" SRC="../js_client/copyright_a.js"></SCRIPT>
+</html>
+
+<%
+//}
+%>
