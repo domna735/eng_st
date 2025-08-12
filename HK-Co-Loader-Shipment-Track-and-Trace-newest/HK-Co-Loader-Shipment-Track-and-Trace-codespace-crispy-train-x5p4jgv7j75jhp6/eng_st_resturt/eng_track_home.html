@@ -1,0 +1,96 @@
+<%@ page import="hkapps.shipment_tracking.*"%>
+<%@ page import="com.hkapps.util.*"%>
+<%
+String nonce = java.util.UUID.randomUUID().toString().replace("-", "");
+response.setHeader("Content-Security-Policy",
+    "default-src 'self'; " +
+    "script-src 'self' 'nonce-" + nonce + "' 'strict-dynamic' https://www.recaptcha.net https://www.gstatic.com; " +
+    "object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; " +
+    "frame-src 'self' https://www.recaptcha.net; " +
+    "connect-src 'self' https://www.recaptcha.net; " +
+    "img-src 'self' data: https://www.recaptcha.net https://www.gstatic.com; " +
+    "style-src 'self' 'unsafe-inline' https://www.gstatic.com/recaptcha/; " +
+    "upgrade-insecure-requests; block-all-mixed-content;");
+%>
+<html>
+<head>
+<title>Shipment Tracking</title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<script src="https://www.recaptcha.net/recaptcha/api.js?render=6LcB8dcZAAAAAJO9mElsjCkPrWVj1rXr2SH9ML_h" nonce="<%=nonce%>"></script>
+<script src="/eng_st/js_client_eng_hws/eng_st_FormCheck.js" nonce="<%=nonce%>"></script>
+<script src="/eng_st/js_client_eng_hws/dhl_alert.js" nonce="<%=nonce%>"></script>
+<script src="/eng_st/js_client/rollovers.js" type="text/javascript" nonce="<%=nonce%>"></script>
+</head>
+<body bgcolor=#ffffff><blockquote>
+<form id="home" action="eng_track.jsp" method="post">
+  <input type="hidden" name="awb">
+  <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+  <div align="left"><table border="0" width="465" height="1">
+    <tr>
+      <td width="1" height="1" valign="top">
+        <textarea name="airbill" rows="12" cols="20"></textarea>
+      </td>
+      <td></td>
+      <td width="265" height="1" valign="top">
+        <font size="2" face="Frutiger, Arial">
+        For tracking of shipments originated from or destinated to Hong Kong,
+        please enter the <b>Airwaybill Number(s)</b> of the shipment(s) you wish
+        to track. If you wish to track more than one shipment, please enter the
+        <b>Airwaybill Number</b> on next line.&nbsp; You may track up to 10 shipments.
+        <p>
+        If <b>both the origins and destinations</b> of your shipments are outside Hong Kong,
+        please click
+        <a id="globalLink" title="global" href="#">
+<img id="global" src="../images/arrow_r.gif" border="0" hspace="2">Global Shipment Tracking</a> for delivery details.
+        </font>
+      </td>
+    </tr>
+    <tr>
+      <td colspan=3>
+        <!-- reCAPTCHA v3: no widget, token is handled in JS -->
+      </td>
+    </tr>
+    <tr>
+      <td colspan=3>
+        <input type="submit" value="Start Tracking" id="startTrackingBtn">
+        <input type=reset value="Clear">
+      </td>
+    </tr>
+  </table>
+  </div>
+
+</form>
+
+</blockquote>
+</body>
+
+<script src="/eng_st/js_client/copyright_a.js" nonce="<%=nonce%>"></script>
+<script nonce="<%=nonce%>">
+// Use eng_st_FormCheck.js validation and dhl_alert for all errors
+document.addEventListener('DOMContentLoaded', function() {
+  var form = document.getElementById('home');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    // Copy textarea value to airbill for legacy checkForm
+    var airbillField = form.querySelector('textarea[name="airbill"]');
+    if (!airbillField) return;
+    form.airbill = airbillField; // for checkForm compatibility
+    // Use legacy checkForm for validation
+    if (!checkForm(form)) {
+      // checkForm will show dhl_alert and return false if invalid
+      e.preventDefault();
+      return false;
+    }
+    // If valid, proceed with reCAPTCHA and submission
+    e.preventDefault();
+    grecaptcha.ready(function() {
+      grecaptcha.execute('6LcB8dcZAAAAAJO9mElsjCkPrWVj1rXr2SH9ML_h', {action: 'submit'}).then(function(token) {
+        document.getElementById('g-recaptcha-response').value = token;
+        // AWB value is already set by checkForm
+        form.submit();
+      });
+    });
+  });
+});
+</script>
+</html>
